@@ -3,6 +3,7 @@ Filename: MetaGPT/examples/build_customized_multi_agents.py
 Created Date: Wednesday, November 15th 2023, 7:12:39 pm
 Author: garylin2099
 """
+
 import re
 
 import fire
@@ -40,13 +41,13 @@ class SimpleWriteCode(Action):
 
 
 class SimpleCoder(Role):
-    name: str = "Alice"
-    profile: str = "SimpleCoder"
+    name: str = "Alice" # 角色名称
+    profile: str = "程序员" # 角色设定
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._watch([UserRequirement])
-        self.set_actions([SimpleWriteCode])
+        self._watch([UserRequirement]) # 关注哪些动作， 这些动作完成之后会把信息发布到环境中，相当于我这个角色订阅了该信息
+        self.set_actions([SimpleWriteCode]) # 我自己可以执行的动作
 
 
 class SimpleWriteTest(Action):
@@ -119,7 +120,23 @@ class SimpleReviewer(Role):
 
 
 async def main(
-    idea: str = "write a function that calculates the product of a list",
+    idea: str = """使用python实现一个算子，算子的要求如下
+    ```
+    cumsum(x, axis=None, dtype=None, name=None)
+    沿给定 axis 计算 List x 的累加和。
+
+    注意：结果的第一个元素和输入的第一个元素相同。
+
+    参数
+    x (List) - 累加的输入，需要进行累加操作的 List。
+
+    axis (int，可选) - 指明需要累加的维度。-1 代表最后一维。默认：None，将输入展开为一维变量再进行累加计算。
+
+    返回
+    List，累加的结果。
+    ```
+    
+    """,
     investment: float = 3.0,
     n_round: int = 5,
     add_human: bool = False,

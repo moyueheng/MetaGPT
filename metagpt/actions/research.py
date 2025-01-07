@@ -76,7 +76,7 @@ above. The report must meet the following requirements:
 
 
 class CollectLinks(Action):
-    """Action class to collect links from a search engine."""
+    """从搜索引擎进行搜索，并获取Url地址列表"""
 
     name: str = "CollectLinks"
     i_context: Optional[str] = None
@@ -98,16 +98,16 @@ class CollectLinks(Action):
         url_per_query: int = 4,
         system_text: str | None = None,
     ) -> dict[str, list[str]]:
-        """Run the action to collect links.
+        """运行动作收集链接。
 
-        Args:
-            topic: The research topic.
-            decomposition_nums: The number of search questions to generate.
-            url_per_query: The number of URLs to collect per search question.
-            system_text: The system text.
+        参数:
+            topic: 研究主题。
+            decomposition_nums: 要生成的搜索问题数量。
+            url_per_query: 每个搜索问题要收集的URL数量。
+            system_text: 系统文本。
 
-        Returns:
-            A dictionary containing the search questions as keys and the collected URLs as values.
+        返回:
+            一个字典,包含搜索问题作为键,收集到的URL作为值。
         """
         system_text = system_text if system_text else RESEARCH_TOPIC_SYSTEM.format(topic=topic)
         keywords = await self._aask(SEARCH_TOPIC_PROMPT, [system_text])
@@ -115,7 +115,7 @@ class CollectLinks(Action):
             keywords = OutputParser.extract_struct(keywords, list)
             keywords = TypeAdapter(list[str]).validate_python(keywords)
         except Exception as e:
-            logger.exception(f"fail to get keywords related to the research topic '{topic}' for {e}")
+            logger.exception(f"获取研究主题'{topic}'相关关键词失败,原因:{e}")
             keywords = [topic]
         results = await asyncio.gather(*(self.search_engine.run(i, as_string=False) for i in keywords))
 
@@ -141,13 +141,13 @@ class CollectLinks(Action):
             queries = OutputParser.extract_struct(queries, list)
             queries = TypeAdapter(list[str]).validate_python(queries)
         except Exception as e:
-            logger.exception(f"fail to break down the research question due to {e}")
+            logger.exception(f"分解研究问题失败,原因:{e}")
             queries = keywords
         ret = {}
         for query in queries:
             ret[query] = await self._search_and_rank_urls(topic, query, url_per_query)
         return ret
-
+    
     async def _search_and_rank_urls(self, topic: str, query: str, num_results: int = 4) -> list[str]:
         """Search and rank URLs based on a query.
 

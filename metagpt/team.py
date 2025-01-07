@@ -121,18 +121,18 @@ class Team(BaseModel):
 
     @serialize_decorator
     async def run(self, n_round=3, idea="", send_to="", auto_archive=True):
-        """Run company until target round or no money"""
+        """运行公司直到达到目标轮次或资金耗尽"""
         if idea:
             self.run_project(idea=idea, send_to=send_to)
 
         while n_round > 0:
             if self.env.is_idle:
-                logger.debug("All roles are idle.")
+                logger.debug("所有角色都处于空闲状态。")
                 break
             n_round -= 1
             self._check_balance()
             await self.env.run()
 
-            logger.debug(f"max {n_round=} left.")
+            logger.debug(f"最多还剩 {n_round=} 轮。")
         self.env.archive(auto_archive)
         return self.env.history
