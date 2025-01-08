@@ -37,7 +37,7 @@ class Team(BaseModel):
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    env: Optional[Environment] = None
+    env: Optional[Environment] = None # 其实环境是不是就可以理解成大家的办公室，大家都在这个办公室里工作
     investment: float = Field(default=10.0)
     idea: str = Field(default="")
 

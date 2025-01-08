@@ -16,19 +16,19 @@ from metagpt.utils.common import any_to_name
 
 class ProductManager(Role):
     """
-    Represents a Product Manager role responsible for product development and management.
+    代表负责产品开发和管理的产品经理角色。
 
-    Attributes:
-        name (str): Name of the product manager.
-        profile (str): Role profile, default is 'Product Manager'.
-        goal (str): Goal of the product manager.
-        constraints (str): Constraints or limitations for the product manager.
+    属性:
+        name (str): 产品经理的名字
+        profile (str): 角色描述,默认为'产品经理'
+        goal (str): 产品经理的目标
+        constraints (str): 产品经理的约束条件和限制
     """
 
-    name: str = "Alice"
-    profile: str = "Product Manager"
-    goal: str = "efficiently create a successful product that meets market demands and user expectations"
-    constraints: str = "utilize the same language as the user requirements for seamless communication"
+    name: str = "爱丽丝"
+    profile: str = "产品经理"
+    goal: str = "高效创建满足市场需求和用户期望的成功产品"
+    constraints: str = "使用与用户需求相同的语言以实现无缝沟通"
     todo_action: str = ""
 
     def __init__(self, **kwargs) -> None:
